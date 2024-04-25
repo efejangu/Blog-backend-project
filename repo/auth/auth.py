@@ -17,7 +17,7 @@ def authenticate_user(user:schema.UserLogin, db:Session):
     - False if the user is not found or the password is incorrect.
     - A dictionary with the user's id and username if authentication is successful.
     """
-    attempting_user = db.query(models.User).filter(user.username ==models.User.username ).first()
+    attempting_user = db.query(models.User).filter(user.username == models.User.username ).first()
     if attempting_user is None:
         return False
     if util.verify_password(user.password, attempting_user.hashed_password):
@@ -25,13 +25,11 @@ def authenticate_user(user:schema.UserLogin, db:Session):
 
 
 def login_user(user_schema:schema.UserLogin, db:Session):
-    auth_user = authenticate_user(user_schema)
-    if auth_user is None:
+    auth_user = authenticate_user(user_schema,db)
+    if (auth_user is None) or (auth_user == False):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password")
 
+    generated_token = auth_tokens.create_access_token(auth_user)
 
-    return schema.Token(
-        access_token = auth_tokens.create_access_token(auth_user),
-        token_type = "bearer"
-    ).dict()
+    return generated_token
 

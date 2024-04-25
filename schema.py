@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+from typing import Union
+import datetime
 
 class UserCreate(BaseModel):
     username: str
@@ -8,11 +10,11 @@ class UserCreate(BaseModel):
     password: str
     confirm_password: str
 
-    class User(BaseModel):
-        username: str
-        first_name: str
-        last_name: str
-        email: str
+class User(BaseModel):
+    username: str
+    first_name: str
+    last_name: str
+    email: str
 
 
 class UserLogin(BaseModel):
@@ -20,8 +22,19 @@ class UserLogin(BaseModel):
     password: str
 
 class PostCreate(BaseModel):
-    user_id: int
+    token: str
     title: str
+    content: str
+
+class Post(BaseModel):
+    id: int
+    title: str
+    content: str
+    created_at: Union[datetime.datetime, None]
+
+class CreateComment(BaseModel):
+    access_token: str
+    post_id: str
     content: str
 
 class Token(BaseModel):
