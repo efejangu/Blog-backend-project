@@ -26,3 +26,16 @@ def create_post(post:schema.PostCreate,db: Session):
 def paginate_posts(params: Params, db: Session) -> Page[schema.Post]:
     stmt = db.query(models.Post).all()
     return paginate(stmt,params=params)
+
+def view_post(post_id: int, db: Session):
+    found_post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    if found_post is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post not found")
+
+    return schema.Post(
+        id = found_post.id,
+        title = found_post.title,
+        content = found_post.content,
+        created_at = found_post.created_at
+
+    )

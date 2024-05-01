@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from repo.posts.post import create_post, paginate_posts
+from repo.posts.post import *
 import schema
 from sqlalchemy.orm import Session
 import db_engine
@@ -27,6 +27,6 @@ def get_posts(
 
 
 @router.get("/{post_id}")
-def get_post(post_id: int):
-    pass
+def get_post(post_id: int,  db: Session = Depends(get_db)):
+    return view_post(post_id, db=db)
 
