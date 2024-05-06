@@ -13,7 +13,7 @@ class User(Base):
     hashed_password = Column(String)
 
     posts = relationship("Post", back_populates="user")
-    likes = relationship("Likes", back_populates="user")
+    look_up = relationship("LookUp", back_populates="user")
     comments = relationship("comment", back_populates="user")
 
 
@@ -29,16 +29,17 @@ class Post(Base):
     user = relationship("User", back_populates="posts")
     likes = relationship("Likes", back_populates="post")
     comments = relationship("comment", back_populates="post")
+    look_up = relationship("LookUp", back_populates="post")
 
 class Likes(Base):
     __tablename__ = 'likes'
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
     post_id = Column(Integer, ForeignKey('posts.id'))
-    created_at = Column(DateTime)
+    like_count = Column(Integer, default=0)
+    dislike_count = Column(Integer, default=0)
 
-    user = relationship("User", back_populates="likes")
+
     post = relationship("Post", back_populates="likes")
 
 class comment(Base):
@@ -52,3 +53,14 @@ class comment(Base):
 
     user = relationship("User", back_populates="comments")
     post = relationship("Post", back_populates="comments")
+
+class LookUp(Base):
+    __tablename__ = 'look_up'
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    post_id = Column(Integer, ForeignKey('posts.id'))
+    like_status = Column(String, default="Neutral")
+
+    user = relationship("User", back_populates="look_up")
+    post = relationship("Post", back_populates="look_up")

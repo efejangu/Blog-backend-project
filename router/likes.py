@@ -5,17 +5,20 @@ import db_engine
 from sqlalchemy.orm import Session
 import schema
 from fastapi import HTTPException
+from repo.posts.likes import  like_post, dislike_post
 from db_engine import get_db
 
 
 
 router = APIRouter(
     prefix="/likes",
+    tags=["likes"]
 )
-@router.post("/{post_id}")
-def like_post(post_id: int , db: Session = Depends(get_db)):
-    pass
+@router.post("/like-post/{token}/{post_id}")
+def like_user_post(token: str, post_id: int , db: Session = Depends(get_db)):
+    return like_post(token,post_id, db)
 
-@router.post("/{post_id}")
-def dislike_post(post_id: int , db: Session = Depends(get_db)):
-    pass
+
+@router.post("/dislike-post/{token}/{post_id}")
+def dislike_user_post(token: str, post_id: int, db: Session = Depends(get_db)):
+    return dislike_post(token, post_id, db)

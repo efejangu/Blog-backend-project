@@ -19,13 +19,6 @@ def decode_access_token(token: str):
 
    try:
         payload = jwt.decode(token, util.SECRET_KEY, algorithms=util.ALGORITHM)
-        expiration_time = payload.get("exp")
-        current_time = datetime.utcnow()
-        if expiration_time is None or current_time > expiration_time:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Token has expired",
-            )
         user_id: str = payload.get("sub")
         if user_id is None:
             raise HTTPException(

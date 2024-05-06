@@ -1,6 +1,6 @@
 # set up fastapi with uvicorn
 from fastapi import FastAPI
-from router import user,auth, post
+from router import user,auth,post, likes
 import uvicorn
 import models
 from db_engine import engine
@@ -27,6 +27,7 @@ app.add_middleware(
 app.include_router(user.router)
 app.include_router(auth.router)
 app.include_router(post.router)
+app.include_router(likes.router)
 models.Base.metadata.create_all(bind=engine)
 
 

@@ -53,8 +53,8 @@ def create_posts():
 
 
 if __name__ == "__main__":
-   # create_users()
-    create_posts()
+    create_users()
+    #create_posts()
 
 print("user_count: ",session.query(models.User).count())
 print("Post_count: ",session.query(models.Post).count())
